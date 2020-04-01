@@ -6,7 +6,7 @@ driver  : kawasaki_akihito
 # 開発手順
 リポジトリのクローン(初回のみ)
 ```
-git clone https://github.com/yodev21/-vending_machine_app.git
+git clone https://github.com/yodev21/vending_machine_app.git
 ```
 
 ## コミットメッセージのルール
@@ -14,14 +14,14 @@ git clone https://github.com/yodev21/-vending_machine_app.git
 ```
 git commit -m 'Add コミットメッセージ  #issue番号'
 # 機能追加       : Add
-# バグ修正       : Fix
+# 修正          : Fix
 # リファクタリング: Refactor
 # 削除          : Remove
 例) 計算機能を追加の場合
     git commit -m 'Add 計算機能の追加 #1'
 ```
 
-## リポジトリにプッシュ
+##リポジトリにプッシュ
 ```
 git push origin master
 ```
