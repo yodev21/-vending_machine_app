@@ -55,7 +55,7 @@ git push origin トピックブランチ名
 ###  インストール方法
 指定したRubyのバージョンのインストールコマンド
 ```
-rbenv install 2.3.5
+rbenv install 2.6.5
 ```
 
 インストールしたRubyを使用可能な状態にするコマンド
