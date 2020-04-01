@@ -1,6 +1,6 @@
 # 開発体制
 leader  : tanaka_yosuke  
-observer: eto_masaya  
+observer: 恵藤昌也 
 driver  : kawasaki_akihito
 
 # 開発手順
