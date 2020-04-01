@@ -1,7 +1,7 @@
 # 開発体制
-leader  : tanaka_yosuke  
-observer: 恵藤昌也 
-driver  : 川崎瑛仁  
+leader  : 田中遥介  
+observer: 恵藤昌也  
+driver  : 川崎瑛仁 
 
 # 開発手順
 リポジトリのクローン(初回のみ)
