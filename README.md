@@ -20,11 +20,35 @@ git commit -m 'Add コミットメッセージ  #issue番号'
 例) 計算機能を追加の場合
     git commit -m 'Add 計算機能の追加 #1'
 ```
+## GitHub Flow
+各メンバーはdevelopブランチからトピックブランチを作成し、
+機能作成が完了次第、PullRequestを行う。
 
-##リポジトリにプッシュ
+リーダーは内容を確認し、問題がなければdevelopoブランチにmergeする。
+
+developブランチにて動作確認を行い問題がなければmasterブランチにmergeする。
+
+### developブランチをpull
 ```
-git push origin master
+git pull origin develop
 ```
+
+
+### トピックブランチを作成
+```
+git checkout -b ○○
+```
+
+### トピックブランチが完成した場合、Githubにプッシュ
+```
+git add .
+git commit -m 'Add コミットメッセージ  #issue番号'
+git push origin トピックブランチ名
+```
+
+### トピックブランチからdevelopブランチへのPullRequestを行う
+
+### 
 # 開発環境
 `Ruby: 2.6.5`
 
