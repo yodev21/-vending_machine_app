@@ -3,6 +3,9 @@ leader  : 田中遥介
 observer: 恵藤昌也  
 driver  : 川崎瑛仁 
 
+# フローチャート
+![vending_machine_flowchart](https://user-images.githubusercontent.com/60313195/78471505-bf6d3500-776c-11ea-9421-231f37d0888b.png)
+
 # 開発手順
 リポジトリのクローン(初回のみ)
 ```
