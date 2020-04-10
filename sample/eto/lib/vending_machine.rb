@@ -1,12 +1,13 @@
 require './drink'
 
 class VendingMachine
-Money_tonyu = [10,50,100,500,1000].freeze
+#Money_tonyu = [10,50,100,500,1000].freeze
 
-  attr_accessor :total
+  attr_accessor :total, :uriage
 
   def initialize
     @total = 0
+    @uriage = 0
     puts "よくできたね、偉いよ!"
     puts "続いてお金投入メソッドを打ち込もう！"
   end
@@ -89,6 +90,10 @@ puts "4:vendingMachine.drink_manualでドリンク購入説明に入るよ"
     puts "コーラを補充,drink_cola = Drink.colaを入力"
     puts "レッドブルを補充,drink_redbull = Drink.redbullを入力"
     puts "水を補充,drink_water = Drink.waterを入力"
+    puts "--------------------------------"
+    puts "コーラを補充,@drink_cola = Drink.colaを入力"
+    puts "レッドブルを補充,@drink_redbull = Drink.redbullを入力"
+    puts "水を補充,@drink_water = Drink.waterを入力"
     puts "drink_manual2メソッドを入力してね"
   end
 
@@ -100,9 +105,154 @@ puts "4:vendingMachine.drink_manualでドリンク購入説明に入るよ"
     puts "drink_manual3メソッドはコーラを補充できるよ"
   end
 
-  #def drink_manual3
-  #  drink_cola = Drink.cola
-  #end
+  def drink_manual3
+    puts "初期補充をしました"
+    puts "現在のラインナップをallメソッドで見よう"
+    @drink_cola = Drink.cola
+  end
+
+  def all
+  puts "現在のラインナップ"
+  puts "konyuメソッドで購入できます"
+    @drink_cola
+    #@drink_cola[0]
+    #@drink_cola.name
+  end
+
+  def konyu333
+    #puts "#{drink}を購入します"
+    #if drink == cola
+      if @total >= @drink_cola.price
+        puts "コーラを選びます"
+        puts "金額が足りるのでコーラを購入できます"
+      elsif
+        @total < @drink_cola.price
+        puts "金額が足りません"
+      end
+    #end
+  end
+
+  def konyu111(drink)
+    if drink == "cola"
+      puts "コーラが買えるか確認します"
+      if @total >= @drink_cola.price
+        puts "金額が足りるのでコーラを購入できます"
+      elsif
+        @total < @drink_cola.price
+        puts "金額が足りないのでコーラを購入できません"
+      end
+    end
+  end
+
+
+  def konyu222(drink)
+    if drink == "cola"
+      puts "コーラを購入します"
+      if @total >= @drink_cola.price
+        puts "金額が足りるのでコーラを購入しました"
+        self.uriage += @drink_cola.price
+        puts "売上金に#{@drink_cola.price}円を追加しました"
+        @drink_cola.honsu -= 1
+        puts "現在のコーラの本数は#{@drink_cola.honsu}本です"
+      elsif
+        @total < @drink_cola.price
+        puts "金額が足りないのでコーラを購入できませんでした"
+      end
+    end
+  end
+
+
+
+
+  def uriage_now
+    @uriage
+  end
+
+
+
+  def honsu_cola2
+    #@drink_cola = Drink.cola
+    @drink_cola.honsu - 1
+
+  end
+
+
+  def honsu_cola3
+    #@drink_cola = Drink.cola
+    @drink_cola.honsu -= 1
+
+  end
+
+
+  def honsu_cola4
+    #@drink_cola = Drink.cola
+    @drink_cola.honsu = @drink_cola.honsu - 1
+
+  end
+
+
+
+
+  def konyu555
+    if @total >= @drink_cola.price
+      puts "OK"
+    end
+  end
+
+  def konyu666(drink)
+    if drink == "cola"
+      puts "OK"
+    end
+  end
+
+
+  def konyu()
+    #puts "#{drink}を購入します"
+    #if drink == cola
+    @drink_cola.price
+  end
+
+  def konyu2()
+    #puts "#{drink}を購入します"
+    #if drink == cola
+    @total
+  end
+
+
+
+  def konyu3
+    if @total >= @drink_cola.price
+    end
+  end
+
+  def konyu4()
+    konyu() >= konyu2()
+  end
+
+
+
+  def honsu_cola
+    #@drink_cola = Drink.cola
+    @drink_cola.honsu
+  end
+
+
+  def name_cola
+    #@drink_cola = Drink.cola
+    @drink_cola.name
+  end
+
+
+  def name_redbull
+    @drink_redbull.name
+  end
+
+  def name_water
+    @drink_water.name
+  end
+
+
+
 
 
 
