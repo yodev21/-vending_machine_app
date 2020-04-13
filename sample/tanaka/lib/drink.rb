@@ -1,5 +1,5 @@
 class Drink
-  attr_reader :name, :price, :honsu
+  attr_accessor :name, :price, :honsu
 
   def self.cola
     self.new 120, :cola, 5
