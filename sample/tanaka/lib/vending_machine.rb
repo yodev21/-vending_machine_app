@@ -27,6 +27,7 @@ puts "------------------------------------"
       puts "#{money}円投入されました"
       self.total += money
       puts "現在の合計金額#{@total}円です"
+      nil
     else
       puts "そのお金は受け付けていません"
       puts "#{money}円は残金に反映されませんでした"
@@ -34,6 +35,7 @@ puts "------------------------------------"
       puts "現在の合計金額#{@total}円です"
       self.oturi += money
       puts "現在のお釣りは#{@oturi}円です"
+      @oturi
     end
   end
 
@@ -43,6 +45,7 @@ puts "------------------------------------"
     self.oturi += @total
     self.total = 0
     puts "合計#{@oturi}円のお釣りだよ"
+    @oturi
   end
 
 

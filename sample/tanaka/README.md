@@ -2,6 +2,16 @@
 
 ```
 require './lib/vending_machine'
+vm = vendingMachine=VendingMachine.new
+# マニュアルの確認
+vm.manual
+# お金の投入(500)
+vm.in(500)
+```
+
+不要
+```
+require './lib/vending_machine'
 v = VendingMachine.new
 p v.stock_info
 p v.stock_count
