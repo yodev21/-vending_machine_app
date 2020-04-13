@@ -1,5 +1,5 @@
 class Drink
-  attr_accessor :name, :price, :honsu
+  attr_accessor :name, :price, :number
 
   def self.cola
     self.new 120, :cola, 5
@@ -13,10 +13,10 @@ class Drink
     self.new 100, :water, 1
   end
 
-  def initialize price, name, honsu
+  def initialize price, name, number
     @name = name
     @price = price
-    @honsu = honsu
+    @number = number
   end
 
 end
