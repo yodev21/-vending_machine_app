@@ -1,3 +1,38 @@
+# 確認手順
+
+```
+irb
+require './lib/vending_machine'
+vm = vendingMachine=VendingMachine.new
+vm.in(500)
+vm.in(501)
+vm.return
+vm.drink_replenishment
+vm.drink_redbull_replenishment
+vm.drink_water_replenishment
+vm.add_one_redbull
+vm.add_one_water
+vm.list_of_drinks
+
+vm.in(500)
+vm.drinks_available_for_purchase
+
+vm.do_you_change_this_drink("cola")
+vm.do_you_change_this_drink("redbull")
+vm.do_you_change_this_drink("water")
+
+vm.buy_a_drink("cola")
+vm.buy_a_drink("redbull")
+vm.buy_a_drink("water")
+
+
+
+# マニュアルの確認
+Manual.manual_message
+# お金の投入(500)
+vm.in(500)
+```
+
 # 開発体制
 leader  : 田中遥介  
 observer: 恵藤昌也  
