@@ -1,10 +1,11 @@
 require './lib/drink'
 require './lib/manual'
 require './lib/message'
+require './lib/money'
 class VendingMachine
   include Manual
   include Message
-#Money_tonyu = [10,50,100,500,1000].freeze
+  include Money
 
   attr_accessor :total, :sales, :change
 
@@ -19,7 +20,7 @@ class VendingMachine
 
   #お金投入
   def in(money)
-    if money == 10 || money == 50 || money == 100 || money == 500 || money == 1000
+    if Money::MONEY.include?(money)
       Message.insert_message(money)
       self.total += money
       Message.current_total_message(total: @total)
