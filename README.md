@@ -7,11 +7,9 @@ vm = vendingMachine=VendingMachine.new
 vm.in(500)
 vm.in(501)
 vm.return
-vm.drink_replenishment
+# vm.drink_replenishment
 vm.drink_redbull_replenishment
 vm.drink_water_replenishment
-vm.add_one_redbull
-vm.add_one_water
 vm.list_of_drinks
 
 vm.in(500)
@@ -25,6 +23,19 @@ vm.buy_a_drink("cola")
 vm.buy_a_drink("redbull")
 vm.buy_a_drink("water")
 
+# その他コマンド
+vm.current_sales
+vm.current_total
+vm.current_change
+vm.cola_price
+vm.number_of_cola
+vm.name_cola
+vm.redbull_price
+vm.number_of_redbull
+vm.name_redbull
+vm.water_price
+vm.number_water
+vm.name_water
 
 
 # マニュアルの確認
