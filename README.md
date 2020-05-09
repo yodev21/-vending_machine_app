@@ -1,19 +1,44 @@
-# 確認手順
+# 仕様方法
 
 ```
+# irb起動
 irb
+
+# ファイル読み込み
 require './lib/vending_machine'
+
+# マニュアルの表示
+Manual.manual_message
+
+# 自動販売機の作成
 vm = vendingMachine=VendingMachine.new
-vm.in(500)
-vm.in(501)
-vm.return
-# vm.drink_replenishment
+
+# ドリンクを補充
+drink_cola_replenishment
 vm.drink_redbull_replenishment
 vm.drink_water_replenishment
-vm.list_of_drinks
+# ※引数に任意の数字を入れることでその値分加算可能
 
-vm.in(500)
+# ドリンクの在庫確認
 vm.drinks_available_for_purchase
+
+# お金の投入
+vm.in(500)
+# ※投入金額可能コマンド一覧
+#  vm.in(10)
+#  vm.in(50)
+#  vm.in(100)
+#  vm.in(500)
+#  vm.in(1000)
+
+# 投入金額の払い戻し
+vm.return
+
+# 売り上げ合計金額の確認
+vm.current_sales
+
+
+vm.list_of_drinks
 
 vm.do_you_change_this_drink("cola")
 vm.do_you_change_this_drink("redbull")
@@ -36,12 +61,6 @@ vm.name_redbull
 vm.water_price
 vm.number_water
 vm.name_water
-
-
-# マニュアルの確認
-Manual.manual_message
-# お金の投入(500)
-vm.in(500)
 ```
 
 # 開発体制

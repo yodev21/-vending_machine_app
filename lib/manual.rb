@@ -18,7 +18,7 @@ module Manual
 ----------------------------------------------------------
 最初はvm=VendingMachine.newしよう!
 
-Manual.manual_messageでマニュアル表示をするよ！
+Manual.manual_messageでマニュアルを確認できるよ！
 ----------------------------------------------------------
     TEXT
   end

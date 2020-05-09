@@ -54,14 +54,19 @@ class VendingMachine
     Message.refund_message(@regi.change)
   end
 
-  def drink_redbull_replenishment(number: 1)
+  def drink_cola_replenishment(number = 1)
+    Message.replenishment_message(drink_name: "cola")
+    @redbull_inventory.replenishment(number: number)
+  end
+  
+  def drink_redbull_replenishment(number = 1)
     Message.replenishment_message(drink_name: "redbull")
-    @redbull_inventory.replenishment
+    @redbull_inventory.replenishment(number: number)
   end
 
-  def drink_water_replenishment
+  def drink_water_replenishment(number = 1)
     Message.replenishment_message(drink_name: "water")
-    @water_inventory.replenishment
+    @water_inventory.replenishment(number: number)
   end
 
   #ラインナップ確認
@@ -153,11 +158,9 @@ class VendingMachine
       Message.buy_a_drink_message(drink_name: "cola")
       if @regi.total >= @cola.price && @cola_inventory.number != 0
         Message.purchased_a_drink_message(drink_name: "cola")
-        # @regi.total -= @cola.price
         @regi.buy(@cola.price)
         Message.subtraction_process_message(drink_price: @cola.price)
         Message.current_total_message(total: @total)
-        # @regi.sales += @cola.price
         @regi.add_sales(@cola.price)
         Message.add_sales_message(price: @cola.price)
         @cola_inventory.shipment

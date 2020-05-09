@@ -1,5 +1,5 @@
 class Stock
-  attr_accessor :drink_name, :number, :stock_number
+  attr_reader :drink_name, :number, :stock_number
   
   def initialize(drink_name: "cola", number: 0)
     Message.replenishment_message
@@ -8,8 +8,8 @@ class Stock
     @stock_number = {drink_name: @drink_name, number: @number}
   end
 
-  def replenishment
-    @number += 1
+  def replenishment(number: 1)
+    @number += number
   end
 
   def shipment
