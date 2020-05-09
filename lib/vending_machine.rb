@@ -4,35 +4,33 @@ require './lib/message'
 require './lib/money'
 require './lib/cash_register'
 require './lib/stock'
+require './lib/inventory_control'
 
 class VendingMachine
   include Manual
   include Message
   include Money
+  include InventoryControl
 
   Manual.first_message
 
   def initialize
-    cash_register
-    drink
-    stock_number
     initialize_message
-  end
 
-  def cash_register
     @regi = CashRegister.new(total: 0, sales: 0, change: 0)
-  end
 
-  def drink
     @cola = Drink.cola
     @redbull = Drink.redbull
     @water = Drink.water
-  end
 
-  def stock_number
-    @cola_inventory = Stock.new(drink_name: "cola", number: 5)
-    @redbull_inventory = Stock.new(drink_name: "redbull", number: 1)
-    @water_inventory = Stock.new(drink_name: "water", number: 1)
+    @drinks = {cola: @cola, redbull: @redbull, water: @water}
+
+    @cola_inventory = Stock.new(product_name: "cola", number: 5)
+    @redbull_inventory = Stock.new(product_name: "redbull", number: 1)
+    @water_inventory = Stock.new(product_name: "water", number: 1)
+
+    @stock_of_drinks = {cola: @cola_inventory, redbull: @redbull_inventory, water: @water_inventory}
+
   end
 
   #お金投入
@@ -43,8 +41,7 @@ class VendingMachine
       Message.current_total_message(total: @regi.total)
     else
       Message.insert_error_message(money, @regi.total)
-      @regi.current_change(money)
-      Message.current_change_message(@regi.change)
+      return money
     end
   end
 
@@ -52,166 +49,99 @@ class VendingMachine
   def return
     @regi.refund
     Message.refund_message(@regi.change)
+    return @regi.change
   end
 
-  def drink_cola_replenishment(number = 1)
-    Message.replenishment_message(drink_name: "cola")
-    @redbull_inventory.replenishment(number: number)
-  end
-  
-  def drink_redbull_replenishment(number = 1)
-    Message.replenishment_message(drink_name: "redbull")
-    @redbull_inventory.replenishment(number: number)
-  end
-
-  def drink_water_replenishment(number = 1)
-    Message.replenishment_message(drink_name: "water")
-    @water_inventory.replenishment(number: number)
+  # ドリンク補充
+  def drink_replenishment(drink_name: "cola", number: 1)
+    InventoryControl.product_replenishment(product_name: drink_name, number_of_items: @stock_of_drinks, number: number)
+    Message.replenishment_message(drink_name: drink_name) 
   end
 
   #ラインナップ確認
   def list_of_drinks
     Message.lineup_message
-    unless  @cola_inventory.number == 0
-      Message.lineup_drink_message(drink_name: @cola.name, 
-                                   drink_price: @cola.price, 
-                                   drink_number: @cola_inventory.number)
+    drinks = []
+    @drinks.each do |key, drink|
+      stock_of_drinks = InventoryControl.stock_number(product_name: drink.name, number_of_items: @stock_of_drinks)
+      unless stock_of_drinks[1].number == 0
+      Message.lineup_drink_message( drink_name: drink.name, 
+                                    drink_price: drink.price, 
+                                    drink_number: stock_of_drinks[1].number)
+      drinks << [drink.name, drink.price, stock_of_drinks[1].number]
+      end
     end
-
-    unless @redbull_inventory.number == 0
-      Message.lineup_drink_message(drink_name: @redbull.name, 
-                                   drink_price: @redbull.price, 
-                                   drink_number: @redbull_inventory.number)
-    end
-
-    unless @water_inventory.number == 0
-      Message.lineup_drink_message(drink_name: @water.name, 
-                                   drink_price: @water.price, 
-                                   drink_number: @water_inventory.number)
-    end
-
+    return drinks
   end
 
-  #買えるものを表示
+  #ドリンクの在庫確認
   def drinks_available_for_purchase
     Message.available_for_purchase_lineup_message
+    drinks = []
 
-    if @regi.total >= @cola.price
-      Message.lineup_drink_message(drink_name: @cola.name, 
-                                   drink_price: @cola.price, 
-                                   drink_number: @cola_inventory.number)
+    @drinks.each do |key, drink|
+      stock_of_drinks = InventoryControl.stock_number(product_name: drink.name, number_of_items: @stock_of_drinks)
+      if @regi.total >= drink.price && stock_of_drinks[1].number > 0
+        Message.lineup_drink_message(drink_name: drink.name, 
+                                    drink_price: drink.price, 
+                                    drink_number: stock_of_drinks[1].number)
+        drinks << [drink.name, drink.price, stock_of_drinks[1].number]
+      end
+
     end
+    drinks
+  end
 
-    if @regi.total >= @redbull.price
-      Message.lineup_drink_message(drink_name: @redbull.name, 
-                                   drink_price: @redbull.price, 
-                                   drink_number: @redbull_inventory.number)
-    end
+  # 対象ドリンクが購入可能か確認
+  def do_you_change_this_drink?(drink_name)
+    drink = InventoryControl.product_search(product_name: drink_name, number_of_items: @drinks)
+    stock_of_drinks = InventoryControl.stock_number(product_name: drink[1].name, number_of_items: @stock_of_drinks)
 
-    if @regi.total >= @water.price
-      Message.lineup_drink_message(drink_name: @water.name, 
-                                   drink_price: @water.price, 
-                                   drink_number: @water_inventory.number)
+    Message.available_for_purchase_drink_message(drink_name: drink[1].name)
+
+    if @regi.total >= drink[1].price && stock_of_drinks[1].number > 0
+      Message.available_for_purchase_message(drink_name: drink[1].name)
+      return true
+    elsif @regi.total >= drink[1].price && stock_of_drinks[1].number > 0
+      Message.inventory_shortage_message
+      return false
+    elsif
+      @regi.total < drink[1].price
+      Message.lack_of_money(drink_name: drink[1].name)
+      return false
     end
   end
 
-  #飲み物が買えるか確認
-  def do_you_change_this_drink(drink)
-    if drink == "cola"
-      Message.available_for_purchase_drink_message(drink_name: "cola")
-      if @regi.total >= @cola.price && @cola_inventory.number != 0
-        Message.available_for_purchase_message(drink_name: "cola")
-      elsif @regi.total >= @cola.price && @cola_inventory.number == 0
-        Message.inventory_shortage_message
-      elsif
-        @regi.total < @cola.price
-        Message.lack_of_money(drink_name: "cola")
-      end
+  # ドリンク購入処理
+  def buy_a_drink(drink_name)
+    drink = InventoryControl.product_search(product_name: drink_name, number_of_items: @drinks)
+    
+    stock_of_drinks = InventoryControl.stock_number(product_name: drink[1].name, number_of_items: @stock_of_drinks)
 
-    elsif drink == "redbull"
-      Message.available_for_purchase_drink_message(drink_name: "redbull")
-      if @regi.total >= @redbull.price && @redbull_inventory.number != 0
-        Message.available_for_purchase_message(drink_name: "redbull")
-      elsif @regi.total >= @redbull.price && @redbull_inventory.number == 0
-        Message.inventory_shortage_message
-      elsif
-        @regi.total < @redbull.price
-        Message.lack_of_money(drink_name: "redbull")
-      end
+    Message.buy_a_drink_message(drink_name: drink[1].name)
 
-    elsif drink == "water"
-      Message.available_for_purchase_drink_message(drink_name: "water")
-      if @regi.total >= @water.price && @water_inventory.number != 0
-        Message.available_for_purchase_message(drink_name: "water")
-      elsif @regi.total >= @water.price && @water_inventory.number == 0
-        Message.inventory_shortage_message
-      elsif
-        @regi.total < @water.price
-        Message.lack_of_money(drink_name: "water")
-      end
-    end
-  end
+    if @regi.total >= drink[1].price && stock_of_drinks[1].number > 0
+      Message.purchased_a_drink_message(drink_name: drink[1].name)
 
-  #飲み物購入
-  def buy_a_drink(drink)
-    if drink == "cola"
-      Message.buy_a_drink_message(drink_name: "cola")
-      if @regi.total >= @cola.price && @cola_inventory.number != 0
-        Message.purchased_a_drink_message(drink_name: "cola")
-        @regi.buy(@cola.price)
-        Message.subtraction_process_message(drink_price: @cola.price)
-        Message.current_total_message(total: @total)
-        @regi.add_sales(@cola.price)
-        Message.add_sales_message(price: @cola.price)
-        @cola_inventory.shipment
-        Message.current_stock_number(drink_name: "cola", 
-                                     drink_number: @cola_inventory.number)
-      elsif @regi.total >= @cola.price && @cola_inventory.number == 0
-        Message.not_available_due_to_ack_of_stock_message
-      elsif
-        @regi.total < @cola.price
-        Message.do_not_have_enough_money_to_buy(drink_name: "cola")
-      end
+      @regi.buy(drink[1].price)
 
-    elsif drink == "redbull"
-      Message.buy_a_drink_message(drink_name: "redbull")
-      if @regi.total >= @redbull.price && @redbull_inventory.number != 0
-        Message.purchased_a_drink_message(drink_name: "redbull")
-        @regi.buy(@redbull.price)
-        Message.subtraction_process_message(drink_price: @redbull.price)
-        Message.current_total_message(total: @total)
-        @regi.add_sales(@redbull.price)
-        Message.add_sales_message(price: @redbull.price)
-        @redbull_inventory.shipment
-        Message.current_stock_number(drink_name: "redbull", 
-                                     drink_number: @redbull_inventory.number)
-      elsif @regi.total >= @drink_redbull.price && @redbull_inventory.number == 0
-        Message.not_available_due_to_ack_of_stock_message
-      elsif
-        @regi.total < @redbull.price
-        Message.do_not_have_enough_money_to_buy(drink_name: "redbull")
-      end
+      Message.subtraction_process_message(drink_price: drink[1].price)
+      Message.current_total_message(total: @regi.total)
 
-    elsif drink == "water"
-      puts "水を購入します"
-      Message.buy_a_drink_message(drink_name: "water")
-      if @regi.total >= @water.price && @water_inventory.number != 0
-        Message.purchased_a_drink_message(drink_name: "water")
-        @regi.buy(@water.price)
-        Message.subtraction_process_message(drink_price: @water.price)
-        Message.current_total_message(total: @total)
-        @regi.add_sales(@water.price)
-        Message.add_sales_message(price: @water.price)
-        @water_inventory.shipment
-        Message.current_stock_number(drink_name: "water", 
-                                     drink_number: @water_inventory.number)
-      elsif @regi.total >= @drink_water.price && @water_inventory.number == 0
-        Message.not_available_due_to_ack_of_stock_message
-      elsif
-        @regi.total < @water.price
-        Message.do_not_have_enough_money_to_buy(drink_name: "water")
-      end
+      @regi.add_sales(drink[1].price)
 
+      Message.add_sales_message(price: drink[1].price)
+
+      Message.current_stock_number(drink_name: drink[1].name, 
+                                   drink_number: stock_of_drinks[1].number)
+      @cola_inventory.shipment
+      return drink[1].name, drink[1].price, stock_of_drinks[1].number
+    elsif @regi.total >= drink[1].price && @cola_inventory.number > 0
+      Message.not_available_due_to_ack_of_stock_message
+      return false
+    elsif @regi.total < drink[1].price
+      Message.do_not_have_enough_money_to_buy(drink_name: drink[1].name)
+      return false
     end
   end
 
@@ -220,62 +150,22 @@ class VendingMachine
     @regi.sales
   end
 
-  #トータル残金確認
+  #残金確認
   def current_total
     @regi.total
   end
 
-  #お釣り
+  #お釣り確認
   def current_change
     @regi.change
   end
 
-  #コーラ情報
-  #コーラの価格を確認
-  def cola_price
-    @cola.price
-  end
-
-  #コーラの本数確認
-  def number_of_cola
-    @cola_inventory.number
-  end
-
-  #コーラの名前確認
-  def name_cola
-    @cola.name
-  end
-
-  #レッドブル情報
-  #レッドブルの価格を確認
-  def redbull_price
-    @redbull.price
-  end
-
-  #レッドブルの本数確認
-  def number_of_redbull
-    @redbull_inventory.number
-  end
-  
-  #レッドブルの名前確認
-  def name_redbull
-    @redbull.name
-  end
-
-  #水の情報
-  #水の価格を確認
-  def water_price
-    @water.price
-  end
-
-  #水の本数確認
-  def number_water
-    @water_inventory.number
-  end
-
-  #水の名前確認
-  def name_water
-    @water.name
+  #個別商品の情報を確認
+  def product_price(product_name: "cola")
+    drink = InventoryControl.product_search(product_name: product_name, number_of_items: @drinks)
+    stock_of_drinks = InventoryControl.stock_number(product_name: drink[1].name, number_of_items: @stock_of_drinks)
+    drink[1].name
+    drink[1].price
+    stock_of_drinks[1].number
   end
 end
-

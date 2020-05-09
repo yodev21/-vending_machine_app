@@ -10,13 +10,10 @@ attr_reader :total, :sales, :change
     @total += money
   end
 
-  def current_change(money)
-    @change = money
-  end
-
   def refund
     @change = @total
     @total = 0
+    return @change, @total
   end
 
   def buy(price)

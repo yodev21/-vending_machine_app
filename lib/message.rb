@@ -18,11 +18,11 @@ module Message
   end
 
   def self.current_change_message(change)
-    print "お釣りは#{change}円です!"
+    print "お釣りは#{change}円です!\n"
   end
 
   def self.refund_message(change)
-    print "#{change}円のお釣りです！"
+    print "#{change}円のお釣りです！\n"
   end
 
   def self.drink_name_conversion(drink_name: "cola")
@@ -44,7 +44,7 @@ module Message
 
   def self.replenishment_message(drink_name: "cola")
     drink_name = drink_name_conversion(drink_name: drink_name)
-    print "#{drink_name}を補充をしました!"
+    print "#{drink_name}を補充をしました!\n"
   end
 
   def self.lineup_message
@@ -103,6 +103,11 @@ module Message
 
   def self.not_available_due_to_ack_of_stock_message
     print "金額は足りますが、在庫がありませんので購入できませんでした!\n"
+  end
+
+  def self.not_available_for_purchase
+    print "購入可能な商品はありませんでした！\n"
+
   end
 
   def self.do_not_have_enough_money_to_buy(drink_name: "cola")

@@ -1,4 +1,4 @@
-# 仕様方法
+# 使用方法
 
 ```
 # irb起動
@@ -13,17 +13,21 @@ Manual.manual_message
 # 自動販売機の作成
 vm = vendingMachine=VendingMachine.new
 
-# ドリンクを補充
-drink_cola_replenishment
-vm.drink_redbull_replenishment
-vm.drink_water_replenishment
-# ※引数に任意の数字を入れることでその値分加算可能
+# ドリンク補充
+vm.drink_replenishment
+vm.drink_replenishment(drink_name: "redbull", number: 1)
+vm.drink_replenishment(drink_name: "water", number: 1)
+# ※引数なしだとコーラが1本補充されます。
+#  drink_nameに「redbull」、「water」を指定し、
+#  引数に任意の数字を入れることでその値分加算可能です。
 
 # ドリンクの在庫確認
-vm.drinks_available_for_purchase
+vm.list_of_drinks # => [[:cola, 120, 6], [:redbull, 200, 2], [:water, 100, 2]]
+
+vm.drinks_available_for_purchase # => []
 
 # お金の投入
-vm.in(500)
+vm.in(500) # => nil
 # ※投入金額可能コマンド一覧
 #  vm.in(10)
 #  vm.in(50)
@@ -31,19 +35,64 @@ vm.in(500)
 #  vm.in(500)
 #  vm.in(1000)
 
+vm.drinks_available_for_purchase # => [[:cola, 120, 6], [:redbull, 200, 2], [:water, 100, 2]]
+
+# 未対応のお金を投入した場合
+vm.in(1) # => 1
+
+# 投入金額の表示
+vm.current_total
+
+# 購入可能である在庫の一覧を確認(金額が足りている場合)
+vm.do_you_change_this_drink?("cola") # => true
+vm.do_you_change_this_drink?("redbull") # => true
+vm.do_you_change_this_drink?("water") # => true
+
+# ドリンク購入処理(金額が足りている場合)
+vm.buy_a_drink("cola") # => [:cola, 120, 5]
+vm.buy_a_drink("redbull") # => [:redbull, 200, 2]
+vm.buy_a_drink("water") # => [:water, 100, 2]
+
+# ドリンク購入処理(金額が足りない場合)
+vm.buy_a_drink("redbull") # => false
+
+# 購入可能である在庫の一覧を確認(金額が足りない場合)
+vm.do_you_change_this_drink?("redbull") # => false
+
 # 投入金額の払い戻し
-vm.return
+vm.return # => 500
 
 # 売り上げ合計金額の確認
-vm.current_sales
+vm.current_sales # => 420
 
+# 終了
+exit
+```
 
+# 確認コマンド(開発用)
+
+```
+irb
+require './lib/vending_machine'
+vm = vendingMachine=VendingMachine.new
+
+vm.drink_replenishment
+vm.drink_replenishment(drink_name: "redbull", number: 1)
+vm.drink_replenishment(drink_name: "water", number: 3)
 vm.list_of_drinks
 
-vm.do_you_change_this_drink("cola")
-vm.do_you_change_this_drink("redbull")
-vm.do_you_change_this_drink("water")
+vm.buy_a_drink("water")
+vm.list_of_drinks
 
+vm.in(500)
+vm.drinks_available_for_purchase
+vm.in(500)
+# vm.return
+vm.current_sales
+vm.list_of_drinks
+vm.do_you_change_this_drink?("cola") # => true
+vm.do_you_change_this_drink?("redbull") # => true
+vm.do_you_change_this_drink?("water")
 vm.buy_a_drink("cola")
 vm.buy_a_drink("redbull")
 vm.buy_a_drink("water")
