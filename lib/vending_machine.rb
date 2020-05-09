@@ -4,6 +4,7 @@ require './lib/message'
 require './lib/money'
 require './lib/cash_register'
 require './lib/stock'
+
 class VendingMachine
   include Manual
   include Message
@@ -38,19 +39,18 @@ class VendingMachine
   def in(money)
     if Money::MONEY.include?(money)
       Message.insert_message(money)
-      @regi.total += money
+      @regi.add_total(money)
       Message.current_total_message(total: @regi.total)
     else
       Message.insert_error_message(money, @regi.total)
-      @regi.change = money
+      @regi.current_change(money)
       Message.current_change_message(@regi.change)
     end
   end
 
   #払い戻し
   def return
-    @regi.change = @regi.total
-    @regi.total = 0
+    @regi.refund
     Message.refund_message(@regi.change)
   end
 
@@ -153,10 +153,12 @@ class VendingMachine
       Message.buy_a_drink_message(drink_name: "cola")
       if @regi.total >= @cola.price && @cola_inventory.number != 0
         Message.purchased_a_drink_message(drink_name: "cola")
-        @regi.total -= @cola.price
+        # @regi.total -= @cola.price
+        @regi.buy(@cola.price)
         Message.subtraction_process_message(drink_price: @cola.price)
         Message.current_total_message(total: @total)
-        @regi.sales += @cola.price
+        # @regi.sales += @cola.price
+        @regi.add_sales(@cola.price)
         Message.add_sales_message(price: @cola.price)
         @cola_inventory.shipment
         Message.current_stock_number(drink_name: "cola", 
@@ -164,7 +166,7 @@ class VendingMachine
       elsif @regi.total >= @cola.price && @cola_inventory.number == 0
         Message.not_available_due_to_ack_of_stock_message
       elsif
-        @regi.otal < @cola.price
+        @regi.total < @cola.price
         Message.do_not_have_enough_money_to_buy(drink_name: "cola")
       end
 
@@ -172,10 +174,10 @@ class VendingMachine
       Message.buy_a_drink_message(drink_name: "redbull")
       if @regi.total >= @redbull.price && @redbull_inventory.number != 0
         Message.purchased_a_drink_message(drink_name: "redbull")
-        @regi.total -= @redbull.price
+        @regi.buy(@redbull.price)
         Message.subtraction_process_message(drink_price: @redbull.price)
         Message.current_total_message(total: @total)
-        @regi.sales += @redbull.price
+        @regi.add_sales(@redbull.price)
         Message.add_sales_message(price: @redbull.price)
         @redbull_inventory.shipment
         Message.current_stock_number(drink_name: "redbull", 
@@ -192,10 +194,10 @@ class VendingMachine
       Message.buy_a_drink_message(drink_name: "water")
       if @regi.total >= @water.price && @water_inventory.number != 0
         Message.purchased_a_drink_message(drink_name: "water")
-        @regi.total -= @water.price
+        @regi.buy(@water.price)
         Message.subtraction_process_message(drink_price: @water.price)
         Message.current_total_message(total: @total)
-        @regi.sales += @water.price
+        @regi.add_sales(@water.price)
         Message.add_sales_message(price: @water.price)
         @water_inventory.shipment
         Message.current_stock_number(drink_name: "water", 

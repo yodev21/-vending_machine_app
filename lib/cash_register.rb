@@ -1,8 +1,29 @@
 class CashRegister
-attr_accessor :total, :sales, :change
+attr_reader :total, :sales, :change
  def initialize(total: 0, sales: 0, change: 0)
     @total = total
     @sales = sales
     @change = change
+  end
+
+  def add_total(money)
+    @total += money
+  end
+
+  def current_change(money)
+    @change = money
+  end
+
+  def refund
+    @change = @total
+    @total = 0
+  end
+
+  def buy(price)
+    @total -= price
+  end
+
+  def add_sales(price)
+    @sales += price
   end
 end
