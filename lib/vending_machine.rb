@@ -33,7 +33,7 @@ class VendingMachine
 
   end
 
-  #お金投入
+  # お金投入処理
   def in(money)
     if Money::MONEY.include?(money)
       Message.insert_message(money)
@@ -45,7 +45,7 @@ class VendingMachine
     end
   end
 
-  #払い戻し
+  # 払い戻し処理
   def return
     @regi.refund
     Message.refund_message(@regi.change)
@@ -56,9 +56,10 @@ class VendingMachine
   def drink_replenishment(drink_name: "cola", number: 1)
     InventoryControl.product_replenishment(product_name: drink_name, number_of_items: @stock_of_drinks, number: number)
     Message.replenishment_message(drink_name: drink_name) 
+    return drink_name, number
   end
 
-  #ラインナップ確認
+  #ラインナップ確認処理
   def list_of_drinks
     Message.lineup_message
     drinks = []
@@ -74,7 +75,7 @@ class VendingMachine
     return drinks
   end
 
-  #ドリンクの在庫確認
+  # 購入可能な商品の一覧確認認処理
   def drinks_available_for_purchase
     Message.available_for_purchase_lineup_message
     drinks = []
@@ -89,7 +90,7 @@ class VendingMachine
       end
 
     end
-    drinks
+    return drinks
   end
 
   # 対象ドリンクが購入可能か確認
@@ -134,9 +135,9 @@ class VendingMachine
 
       Message.current_stock_number(drink_name: drink[1].name, 
                                    drink_number: stock_of_drinks[1].number)
-      @cola_inventory.shipment
+      stock_of_drinks[1].shipment
       return drink[1].name, drink[1].price, stock_of_drinks[1].number
-    elsif @regi.total >= drink[1].price && @cola_inventory.number > 0
+    elsif @regi.total >= drink[1].price && stock_of_drinks[1].number > 0
       Message.not_available_due_to_ack_of_stock_message
       return false
     elsif @regi.total < drink[1].price
@@ -145,27 +146,25 @@ class VendingMachine
     end
   end
 
-  #売上確認
+  #売上確認処理
   def current_sales
     @regi.sales
   end
 
-  #残金確認
+  #残金確認処理
   def current_total
     @regi.total
   end
 
-  #お釣り確認
+  #お釣り確認処理
   def current_change
     @regi.change
   end
 
-  #個別商品の情報を確認
+  #個別商品の情報確認処理
   def product_price(product_name: "cola")
     drink = InventoryControl.product_search(product_name: product_name, number_of_items: @drinks)
     stock_of_drinks = InventoryControl.stock_number(product_name: drink[1].name, number_of_items: @stock_of_drinks)
-    drink[1].name
-    drink[1].price
-    stock_of_drinks[1].number
+    return drink[1].name, drink[1].price, stock_of_drinks[1].number
   end
 end
