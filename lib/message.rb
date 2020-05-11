@@ -25,26 +25,20 @@ module Message
     print "#{change}円のお釣りです！\n"
   end
 
-  def self.drink_name_conversion(drink_name: "cola")
+  def self.drink_name_conversion(drink_name: :cola)
     case drink_name
-    when "cola"
-      drink_name = "コーラ"
     when :cola
       drink_name = "コーラ"
-    when "redbull"
-      drink_name = "レッドブル"
     when :redbull
       drink_name = "レッドブル"
-    when "water"
-      drink_name = "水"
     when :water
       drink_name = "水"
     end
   end
 
-  def self.replenishment_message(drink_name: "cola")
-    drink_name = drink_name_conversion(drink_name: drink_name)
-    print "#{drink_name}を補充をしました!\n"
+  def self.replenishment_message(product_name: :product_name)
+    product_name = drink_name_conversion(drink_name: product_name)
+    print "#{product_name}を補充をしました!\n"
   end
 
   def self.lineup_message
@@ -79,11 +73,11 @@ module Message
     print "金額が足りないので#{drink_name}を購入できません!\n"
   end
 
-  def self.buy_a_drink_message(drink_name: "cola")
+  def self.purchase_message(drink_name: "cola")
     print "#{drink_name}を購入します！\n"
   end
 
-  def self.purchased_a_drink_message(drink_name: "cola")
+  def self.purchased_message(drink_name: "cola")
     drink_name = drink_name_conversion(drink_name: drink_name)
     print "在庫があり、金額が足りるので#{drink_name}を購入しました!\n"
   end
@@ -110,7 +104,7 @@ module Message
 
   end
 
-  def self.do_not_have_enough_money_to_buy(drink_name: "cola")
+  def self.do_not_have_enough_money_to_purchase(drink_name: "cola")
     print "金額が足りないので#{drink_name}を購入できませんでした!\n"
   end
 end

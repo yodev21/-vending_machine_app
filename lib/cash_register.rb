@@ -16,7 +16,7 @@ attr_reader :total, :sales, :change
     return @change, @total
   end
 
-  def buy(price)
+  def purchase(price)
     @total -= price
   end
 

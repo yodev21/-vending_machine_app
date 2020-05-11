@@ -1,7 +1,7 @@
 class Stock
   attr_reader :product_name, :number, :stock_number
   
-  def initialize(product_name: "商品名", number: 0)
+  def initialize(product_name: :product_name, number: 0)
     @product_name = product_name
     @number = number
   end

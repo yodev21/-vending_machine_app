@@ -5,15 +5,15 @@ describe VendingMachine do
     context "お金を投入した場合" do
       it "想定した金額であればnilを返すこと" do
         vm = vendingMachine=VendingMachine.new
-        expect(vm.in(10)).to be nil
-        expect(vm.in(50)).to be nil
-        expect(vm.in(100)).to be nil
-        expect(vm.in(500)).to be nil
-        expect(vm.in(1000)).to be nil
+        expect(vm.insert_coin(10)).to be nil
+        expect(vm.insert_coin(50)).to be nil
+        expect(vm.insert_coin(100)).to be nil
+        expect(vm.insert_coin(500)).to be nil
+        expect(vm.insert_coin(1000)).to be nil
       end
       it "Warn 想定外の金額であれば投入した金額を変えること" do
         vm = vendingMachine=VendingMachine.new
-        expect(vm.in(1)).to be 1
+        expect(vm.insert_coin(1)).to be 1
       end
     end
   end
@@ -22,9 +22,9 @@ describe VendingMachine do
     context "払い戻し処理が行われた場合" do
       it "現在の投入金額が表示されること" do
         vm = vendingMachine=VendingMachine.new
-        vm.in(500)
-        vm.in(500)
-        expect(vm.return).to be 1000
+        vm.insert_coin(500)
+        vm.insert_coin(500)
+        expect(vm.refund).to be 1000
       end
     end
   end
@@ -33,17 +33,17 @@ describe VendingMachine do
     context "ドリンク補充が行われた場合" do
       it "colaの情報が表示されること" do
         vm = vendingMachine=VendingMachine.new
-        expect(vm.drink_replenishment).to eq(["cola", 1])
+        expect(vm.drink_replenishment).to eq([:cola, 1])
       end
 
       it "redbullの情報が表示されること" do
         vm = vendingMachine=VendingMachine.new
-        expect(vm.drink_replenishment(drink_name: "redbull", number: 1)).to eq(["redbull", 1])
+        expect(vm.drink_replenishment(drink_name: :redbull, number: 1)).to eq([:redbull, 1])
       end
 
       it "waterの情報が表示されること" do
         vm = vendingMachine=VendingMachine.new
-        expect(vm.drink_replenishment(drink_name: "water", number: 1)).to eq(["water", 1])
+        expect(vm.drink_replenishment(drink_name: :water, number: 1)).to eq([:water, 1])
       end
     end
   end
@@ -58,13 +58,13 @@ describe VendingMachine do
     context "在庫が存在しない場合" do
       it "対象の商品が表示されないこと" do
         vm = vendingMachine=VendingMachine.new
-        vm.in(1000)
-        vm.in(1000)
+        vm.insert_coin(1000)
+        vm.insert_coin(1000)
         5.times do |n|
-          vm.buy_a_drink("cola") 
+          vm.purchase(:cola) 
         end
-        vm.buy_a_drink("redbull")
-        vm.buy_a_drink("water")
+        vm.purchase(:redbull)
+        vm.purchase(:water)
         vm.list_of_drinks
         expect(vm.list_of_drinks).to eq([])
       end
@@ -75,14 +75,14 @@ describe VendingMachine do
     context "購入可能な商品が存在する場合" do
       it "対象の商品が表示されること" do
         vm = vendingMachine=VendingMachine.new
-        vm.in(1000)
-        expect(vm.drinks_available_for_purchase).to eq([[:cola, 120, 5], [:redbull, 200, 1], [:water, 100, 1]])
+        vm.insert_coin(1000)
+        expect(vm.available_drinks).to eq([[:cola, 120, 5], [:redbull, 200, 1], [:water, 100, 1]])
       end
     end
     context "購入可能な商品が存在しない場合" do
       it "[]が表示されること" do
         vm = vendingMachine=VendingMachine.new
-        expect(vm.drinks_available_for_purchase).to eq([])
+        expect(vm.available_drinks).to eq([])
 
       end
     end
@@ -92,18 +92,18 @@ describe VendingMachine do
     context "対象の商品が購入可能な場合" do
       it "trueが出力されること" do
         vm = vendingMachine=VendingMachine.new
-        vm.in(1000)
-        expect(vm.do_you_change_this_drink?("cola")).to be_truthy
-        expect(vm.do_you_change_this_drink?("redbull")).to be_truthy
-        expect(vm.do_you_change_this_drink?("water")).to be_truthy
+        vm.insert_coin(1000)
+        expect(vm.available?(:cola)).to be_truthy
+        expect(vm.available?(:redbull)).to be_truthy
+        expect(vm.available?(:water)).to be_truthy
       end
     end
     context "対象の商品が購入不可の場合" do
       it "falseが出力されること" do
         vm = vendingMachine=VendingMachine.new
-        expect(vm.do_you_change_this_drink?("cola")).to be_falsey
-        expect(vm.do_you_change_this_drink?("redbull")).to be_falsey
-        expect(vm.do_you_change_this_drink?("water")).to be_falsey
+        expect(vm.available?(:cola)).to be_falsey
+        expect(vm.available?(:redbull)).to be_falsey
+        expect(vm.available?(:water)).to be_falsey
       end
     end
   end
@@ -112,18 +112,18 @@ describe VendingMachine do
     context "購入可能な商品に対して購入処理を行った場合" do
       it "購入した商品情報が表示されること" do
         vm = vendingMachine=VendingMachine.new
-        vm.in(1000)
-        expect(vm.buy_a_drink("cola")).to include :cola, 120, 4
-        expect(vm.buy_a_drink("redbull")).to include :redbull, 200, 0
-        expect(vm.buy_a_drink("water")).to include :water, 100, 0
+        vm.insert_coin(1000)
+        expect(vm.purchase(:cola)).to include :cola, 120, 4
+        expect(vm.purchase(:redbull)).to include :redbull, 200, 0
+        expect(vm.purchase(:water)).to include :water, 100, 0
       end
     end
     context "購入不可能な商品に対して購入処理を行った場合" do
       it "falseが出力されること" do
         vm = vendingMachine=VendingMachine.new
-        expect(vm.buy_a_drink("cola")).to be_falsey
-        expect(vm.buy_a_drink("redbull")).to be_falsey
-        expect(vm.buy_a_drink("water")).to be_falsey
+        expect(vm.purchase(:cola)).to be nil
+        expect(vm.purchase(:redbull)).to be nil
+        expect(vm.purchase(:water)).to be nil
       end
     end
   end
@@ -131,8 +131,8 @@ describe VendingMachine do
   describe "売上確認処理" do
     it "売り上げが出力されること" do
       vm = vendingMachine=VendingMachine.new
-      vm.in(1000)
-      vm.buy_a_drink("cola")
+      vm.insert_coin(1000)
+      vm.purchase(:cola)
       expect(vm.current_sales).to eq 120
     end
   end
@@ -140,8 +140,8 @@ describe VendingMachine do
   describe "残金確認処理" do
     it "残金が表示されること" do
       vm = vendingMachine=VendingMachine.new
-      vm.in(1000)
-      vm.buy_a_drink("cola")
+      vm.insert_coin(1000)
+      vm.purchase(:cola)
       expect(vm.current_total).to eq 880
     end
   end
@@ -149,9 +149,9 @@ describe VendingMachine do
   describe "お釣り確認処理" do
     it "お釣りが表示されること" do
       vm = vendingMachine=VendingMachine.new
-      vm.in(1000)
-      vm.buy_a_drink("cola")
-      vm.return
+      vm.insert_coin(1000)
+      vm.purchase(:cola)
+      vm.refund
       expect(vm.current_change).to eq 880
     end
   end
@@ -159,15 +159,15 @@ describe VendingMachine do
   describe "個別商品の情報確認処理" do
     it "個別の商品情報が表示されること(cola)" do
       vm = vendingMachine=VendingMachine.new
-      expect(vm.product_price).to include :cola, 120, 5
+      expect(vm.product_information).to include :cola, 120, 5
     end
     it "個別の商品情報が表示されること(redbull)" do
       vm = vendingMachine=VendingMachine.new
-      expect(vm.product_price(product_name: "redbull")).to include :redbull, 200, 1
+      expect(vm.product_information(product_name: :redbull)).to include :redbull, 200, 1
     end
     it "個別の商品情報が表示されること(water)" do
       vm = vendingMachine=VendingMachine.new
-      expect(vm.product_price(product_name: "water")).to include :water, 100, 1
+      expect(vm.product_information(product_name: :water)).to include :water, 100, 1
     end
   end
 end

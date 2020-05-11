@@ -31,11 +31,11 @@ Manual.manual_messageでマニュアルを確認できるよ！
 続いてお金投入コマンドを打ち込んでみよう！
 
 □使用可能なお金投入コマンド
-vm.in(10)
-vm.in(50)
-vm.in(100)
-vm.in(500)
-vm.in(1000)
+vm.insert_coin(10)
+vm.insert_coin(50)
+vm.insert_coin(100)
+vm.insert_coin(500)
+vm.insert_coin(1000)
 
 □マニュアル表示コマンド
 Manual.manual_message
@@ -50,59 +50,51 @@ manual(コマンド一覧)
 
 ----------------------------------------------------------
 お金投入コマンド
-vm.in(お金)
+vm.insert_coin(お金)
+
+使用例）
+vm.insert_coin(10)
+vm.insert_coin(50)
+vm.insert_coin(100)
+vm.insert_coin(500)
+vm.insert_coin(1000)
 
 投入したお金が対象のお金だったら使用可能だよ！
 
 ----------------------------------------------------------
 払い戻しコマンド
-vm.return
+vm.refund
 
 払い戻しが出来るよ！
 
 ----------------------------------------------------------
 合計金額確認コマンド
-vm.total
-
-もしくは
-
-vm.total_now
+vm.current_total
 
 現在の合計金額を確認出来るよ！
 
 ----------------------------------------------------------
 売上確認コマンド
-vm.sales
-
-もしくは
-
-vm.sales_now
+vm.current_sales
 
 現在の売上を確認出来るよ！
 
 ----------------------------------------------------------
 お釣り確認コマンド
-vm.change
+vm.current_change
 
 現在のお釣りを確認出来るよ！
 
 ----------------------------------------------------------
-ドリンク初期補充コマンド
+ドリンク補充コマンド
 vm.drink_replenishment
 
 ドリンクの初期補充が出来るよ！
 
-----------------------------------------------------------
-レッドブル初期補充コマンド
-vm.drink_redbull_replenishment
-
-レッドブルの補充出来るよ！
-
-----------------------------------------------------------
-水初期補充コマンド
-vm.drink_water_replenishment
-
-水の補充出来るよ！
+使用例）
+vm.drink_replenishment(:cola)
+vm.drink_replenishment(:redbull)
+vm.drink_replenishment(:water)
 
 ----------------------------------------------------------
 ラインナップ確認コマンド
@@ -112,49 +104,43 @@ vm.list_of_drinks
 
 ----------------------------------------------------------
 購入可能一覧確認コマンド
-vm.drinks_available_for_purchase
+vm.available_drinks
 
 現在の合計金額で購入できる飲み物一覧を確認できるよ！
 
 ----------------------------------------------------------
 対象飲料を購入確認コマンド
-vm.do_you_change_this_drink("飲み物名")
+vm.available?(:飲み物名)
 
 飲み物が購入できるか確認出来るよ！
 
 使用例）
-vm.do_you_change_this_drink("cola")
-vm.do_you_change_this_drink("redbull")
-vm.do_you_change_this_drink("water")
+vm.available?(:cola)
+vm.available?(:redbull)
+vm.available?(:water)
 
 ----------------------------------------------------------
-対象飲料購入コマンド
-vm.buy_a_drink("飲み物名")
+対象商品購入コマンド
+vm.purchased(:飲み物名)
 
 飲み物が購入出来るよ！
 
 使用例)colaかredbullかwater
-vm.buy_a_drink("cola")
-vm.buy_a_drink("redbull")
-vm.buy_a_drink("water")
+vm.purchased(:cola)
+vm.purchased(:redbull)
+vm.purchased(:water)
 
 ----------------------------------------------------------
-コーラ在庫本数確認コマンド
-vm.number_cola
+在庫確認コマンド
+vm.product_information
 
-コーラの在庫本数を確認出来るよ！
+使用例）
+vm.product_information
+vm.product_information(:redbull)
+vm.product_information(:water)
 
-----------------------------------------------------------
-レッドブル在庫本数確認コマンド
-vm.number_redbull
+在庫情報を確認出来るよ！
 
-レッドブルの在庫本数を確認出来るよ！
-
-----------------------------------------------------------
-水在庫本数確認コマンド
-vm.number_water
-
-水の在庫本数を確認出来るよ！
 ----------------------------------------------------------
     TEXT
   end
