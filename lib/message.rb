@@ -45,9 +45,12 @@ module Message
     print "現在のラインナップ\n"
   end
 
-  def self.lineup_information_message(product_name: :cola, product_price: 0, number_of_items: 0)
-    product_name = product_name_conversion(product_name: product_name)
-    print "#{product_name}, #{product_price}円, #{number_of_items}本\n"
+  def self.lineup_information_message(product_list: args={})
+    procucts = []
+    product_list.each do |product|
+      product_name = product_name_conversion(product_name: product[0])
+      print "#{product_name}, #{product[1]}円, #{product[2]}本\n"
+    end
   end
 
   def self.available_for_purchase_lineup_message
