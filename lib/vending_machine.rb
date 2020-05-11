@@ -121,7 +121,7 @@ class VendingMachine
 
     Message.purchase_message(drink_name: drink[1].name)
 
-    if @cash_register.total >= drink[1].price && stock_of_drinks[1].number > 0
+   if @cash_register.total >= drink[1].price && stock_of_drinks[1].number > 0
       Message.purchased_message(drink_name: drink[1].name)
 
       @cash_register.purchase(drink[1].price)
@@ -139,10 +139,8 @@ class VendingMachine
       return drink[1].name, drink[1].price, stock_of_drinks[1].number
     elsif @cash_register.total >= drink[1].price && stock_of_drinks[1].number > 0
       Message.not_available_due_to_ack_of_stock_message
-      return nil
     elsif @cash_register.total < drink[1].price
       Message.do_not_have_enough_money_to_purchase(drink_name: drink[1].name)
-      return nil
     end
   end
 

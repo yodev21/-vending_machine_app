@@ -96,7 +96,7 @@ module Message
   end
 
   def self.not_available_due_to_ack_of_stock_message
-    print "金額は足りますが、在庫がありませんので購入できませんでした!\n"
+    p "金額は足りますが、在庫がありませんので購入できませんでした!\n"
   end
 
   def self.not_available_for_purchase
@@ -104,7 +104,8 @@ module Message
 
   end
 
-  def self.do_not_have_enough_money_to_purchase(drink_name: "cola")
-    print "金額が足りないので#{drink_name}を購入できませんでした!\n"
+  def self.do_not_have_enough_money_to_purchase(drink_name: :cola)
+    product_name = drink_name_conversion(drink_name: drink_name)
+    p "金額が足りないので#{product_name}を購入できませんでした!\n"
   end
 end
