@@ -110,7 +110,7 @@ describe VendingMachine do
 
   describe "ドリンク購入処理" do
     context "購入可能な商品に対して購入処理を行った場合" do
-      it "購入した商品情報が表示されること" do
+      it "購入した商品情報が表示されること(コーラ)" do
         vm = vendingMachine=VendingMachine.new
         vm.insert_coin(1000)
         expect(vm.purchase(:cola)).to include :cola, 120, 4

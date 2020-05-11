@@ -41,7 +41,7 @@ vm.available_drinks # => [[:cola, 120, 6], [:redbull, 200, 2], [:water, 100, 2]]
 vm.insert_coin(1) # => 1
 
 # 投入金額の表示
-vm.current_total
+vm.current_total # => 500
 
 # 購入可能である在庫の一覧を確認(金額が足りている場合)
 vm.available?(:cola) # => true
@@ -50,17 +50,17 @@ vm.available?(:water) # => true
 
 # ドリンク購入処理(金額が足りている場合)
 vm.purchase(:cola) # => [:cola, 120, 5]
-vm.purchase(:redbull) # => [:redbull, 200, 2]
-vm.purchase(:water) # => [:water, 100, 2]
+vm.purchase(:redbull) # => [:redbull, 200, 1]
+vm.purchase(:water) # => [:water, 100, 1]
 
 # ドリンク購入処理(金額が足りない場合)
-vm.purchase(:redbull) # => false
+vm.purchase(:redbull) # => "金額が足りないのでレッドブルを購入できませんでした!"
 
 # 購入可能である在庫の一覧を確認(金額が足りない場合)
 vm.available?(:redbull) # => false
 
 # 投入金額の払い戻し
-vm.refund # => 500
+vm.refund # => 80
 
 # 売り上げ合計金額の確認
 vm.current_sales # => 420

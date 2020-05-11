@@ -19,18 +19,19 @@ class VendingMachine
 
     @cash_register = CashRegister.new(total: 0, sales: 0, change: 0)
 
-    cola = Drink.cola
-    redbull = Drink.redbull
-    water = Drink.water
+    @products = initialize_product
+    @number_of_items = initilize_replenishment
 
-    @drinks = {cola: cola, redbull: redbull, water: water}
+  end
 
-    cola_inventory = Stock.new(product_name: :cola, number: 5)
-    redbull_inventory = Stock.new(product_name: :redbull, number: 1)
-    water_inventory = Stock.new(product_name: :water, number: 1)
+  # 商品の初期化処理
+  def initilize_replenishment
+    return InventoryControl.initilize_replenishment
+  end
 
-    @stock_of_drinks = {cola: cola_inventory, redbull: redbull_inventory, water: water_inventory}
-
+  # 在庫の初期化処理
+  def initialize_product
+    return InventoryControl.initilize_product
   end
 
   # お金投入処理
@@ -52,18 +53,18 @@ class VendingMachine
     return @cash_register.change
   end
 
-  # ドリンク補充
+  # 商品補充処理
   def drink_replenishment(drink_name: :cola, number: 1)
-    InventoryControl.product_replenishment(product_name: drink_name, number_of_items: @stock_of_drinks, number: number)
+    InventoryControl.product_replenishment(product_name: drink_name, number_of_items: @number_of_items, number: number)
     Message.replenishment_message(product_name: drink_name) 
     return drink_name, number
   end
 
-  #ラインナップ確認処理
+  ## 商品の一覧確認認処理
   def list_of_drinks
     Message.lineup_message
-    products = InventoryControl.get_product_list( product_list: @drinks, 
-                                                  number_of_items: @stock_of_drinks )
+    products = InventoryControl.get_product_list(product_list: @products, 
+                                                  number_of_items: @number_of_items)
     Message.lineup_information_message(product_list: products)
     return products
   end
@@ -71,9 +72,9 @@ class VendingMachine
   # 購入可能な商品の一覧確認認処理
   def available_drinks
     Message.available_for_purchase_lineup_message
-    products = InventoryControl.get_product_list( product_list: @drinks, 
-                                                  number_of_items: @stock_of_drinks, 
-                                                  cash_register: @cash_register )
+    products = InventoryControl.get_product_list(product_list: @products, 
+                                                 number_of_items: @number_of_items, 
+                                                 cash_register: @cash_register)
     return products
   end
 
@@ -81,10 +82,10 @@ class VendingMachine
   def available?(product_name)
     Message.purchase_confirmation_message(product_name: product_name)
     search_result = {}
-    search_result = InventoryControl.get_product?( product_name: product_name,
-                                                            product_list: @drinks,
-                                                            number_of_items: @stock_of_drinks,
-                                                            cash_register: @cash_register)
+    search_result = InventoryControl.get_product?(product_name: product_name,
+                                                  product_list: @products,
+                                                  number_of_items: @number_of_items,
+                                                  cash_register: @cash_register)
     if search_result[:reason] == "available_for_purchase"
       Message.available_for_purchase_message(product_name: search_result[:item_name])
     elsif search_result[:reason] == "inventory_shortage"
@@ -98,32 +99,34 @@ class VendingMachine
 
   # 購入処理
   def purchase(product_name)
-    drink = InventoryControl.product_search(product_name: product_name, number_of_items: @drinks)
-    stock_of_drinks = InventoryControl.stock_number(product_name: drink[1].name, number_of_items: @stock_of_drinks)
+    product_information = InventoryControl.product_information(product_name: product_name, 
+                                                               product_list: @products,
+                                                               number_of_items: @number_of_items)
+    Message.purchase_message(product_name: product_name)
 
-    Message.purchase_message(product_name: drink[1].name)
+   if @cash_register.total >= product_information[:product_price] && product_information[:number_of_items].number > 0
+      Message.purchased_message(product_name: product_information[:product_name])
 
-   if @cash_register.total >= drink[1].price && stock_of_drinks[1].number > 0
-      Message.purchased_message(product_name: drink[1].name)
-
-      @cash_register.purchase(drink[1].price)
-      Message.subtraction_process_message(product_price: drink[1].price)
+      @cash_register.purchase(product_information[:product_price])
+      Message.subtraction_process_message(product_price: product_information[:product_price])
       Message.current_total_message(total: @cash_register.total)
 
-      @cash_register.add_sales(drink[1].price)
-      Message.add_sales_message(product_price: drink[1].price)
+      @cash_register.add_sales(product_information[:product_price])
+      Message.add_sales_message(product_price: product_information[:product_price])
 
-      stock_of_drinks[1].shipment
-      Message.current_stock_number(product_name: drink[1].name, 
-                                   number_of_items: stock_of_drinks[1].number)
+      product_information[:number_of_items].shipment
+      Message.current_stock_number(product_name: product_information[:product_name], 
+                                   number_of_items: product_information[:number_of_items].number)
 
-      return drink[1].name, drink[1].price, stock_of_drinks[1].number
+      return [product_information[:product_name],
+              product_information[:product_price], 
+              product_information[:number_of_items].number]
 
-    elsif @cash_register.total >= drink[1].price && stock_of_drinks[1].number > 0
+    elsif @cash_register.total >= product_information[:product_price] && product_information[:number_of_items].number > 0
       Message.not_available_due_to_ack_of_stock_message
 
-    elsif @cash_register.total < drink[1].price
-      Message.do_not_have_enough_money_to_purchase(product_name: drink[1].name)
+    elsif @cash_register.total < product_information[:product_price]
+      Message.do_not_have_enough_money_to_purchase(product_name: product_information[:product_name])
 
     end
   end
@@ -145,9 +148,11 @@ class VendingMachine
 
   #個別商品の情報確認処理
   def product_information(product_name: :cola)
-    product = InventoryControl.product_search(product_name: product_name, number_of_items: @drinks)
-    stock_number = InventoryControl.stock_number(product_name: product[1].name, number_of_items: @stock_of_drinks)
-    return product[1].name, product[1].price, stock_number[1].number
-
+    product_information = InventoryControl.product_information(product_name: product_name, 
+                                                               product_list: @products,
+                                                               number_of_items: @number_of_items)
+    return [product_information[:product_name], 
+            product_information[:product_price], 
+            product_information[:number_of_items].number]
   end
 end
