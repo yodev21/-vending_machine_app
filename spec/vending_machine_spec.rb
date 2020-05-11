@@ -121,9 +121,9 @@ describe VendingMachine do
     context "購入不可能な商品に対して購入処理を行った場合" do
       it "falseが出力されること" do
         vm = vendingMachine=VendingMachine.new
-        expect(vm.purchase(:cola)).to eq "金額が足りないのでコーラを購入できませんでした!\n"
-        expect(vm.purchase(:redbull)).to eq "金額が足りないのでレッドブルを購入できませんでした!\n"
-        expect(vm.purchase(:water)).to eq "金額が足りないので水を購入できませんでした!\n"
+        expect(vm.purchase(:cola)).to eq "金額が足りないのでコーラを購入できませんでした!"
+        expect(vm.purchase(:redbull)).to eq "金額が足りないのでレッドブルを購入できませんでした!"
+        expect(vm.purchase(:water)).to eq "金額が足りないので水を購入できませんでした!"
       end
     end
   end

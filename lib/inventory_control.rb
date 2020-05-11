@@ -5,7 +5,7 @@ module InventoryControl
     stock_of_drinks[1].replenishment(number: number)
   end
 
-  def self.stock_number(product_name: "商品名", number_of_items: args={})
+  def self.stock_number(product_name: :product_name, number_of_items: args={})
     number_of_items.find { |k, v| v.product_name.to_sym == product_name.to_sym }
   end
 

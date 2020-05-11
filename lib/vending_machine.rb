@@ -66,9 +66,9 @@ class VendingMachine
     @drinks.each do |key, drink|
       stock_of_drinks = InventoryControl.stock_number(product_name: drink.name, number_of_items: @stock_of_drinks)
       unless stock_of_drinks[1].number == 0
-      Message.lineup_drink_message( drink_name: drink.name, 
-                                    drink_price: drink.price, 
-                                    drink_number: stock_of_drinks[1].number)
+      Message.lineup_information_message( product_name: drink.name, 
+                                          product_price: drink.price, 
+                                          number_of_items: stock_of_drinks[1].number)
       drinks << [drink.name, drink.price, stock_of_drinks[1].number]
       end
     end
@@ -83,9 +83,9 @@ class VendingMachine
     @drinks.each do |key, drink|
       stock_of_drinks = InventoryControl.stock_number(product_name: drink.name, number_of_items: @stock_of_drinks)
       if @cash_register.total >= drink.price && stock_of_drinks[1].number > 0
-        Message.lineup_drink_message(drink_name: drink.name, 
-                                    drink_price: drink.price, 
-                                    drink_number: stock_of_drinks[1].number)
+        Message.lineup_information_message( product_name: drink.name, 
+                                            product_price: drink.price, 
+                                            number_of_items: stock_of_drinks[1].number)
         drinks << [drink.name, drink.price, stock_of_drinks[1].number]
       end
 
@@ -98,17 +98,17 @@ class VendingMachine
     drink = InventoryControl.product_search(product_name: product_name, number_of_items: @drinks)
     stock_of_drinks = InventoryControl.stock_number(product_name: drink[1].name, number_of_items: @stock_of_drinks)
 
-    Message.available_for_purchase_drink_message(drink_name: drink[1].name)
+    Message.purchase_confirmation_message(product_name: drink[1].name)
 
     if @cash_register.total >= drink[1].price && stock_of_drinks[1].number > 0
-      Message.available_for_purchase_message(drink_name: drink[1].name)
+      Message.available_for_purchase_message(product_name: drink[1].name)
       return true
     elsif @cash_register.total >= drink[1].price && stock_of_drinks[1].number > 0
       Message.inventory_shortage_message
       return false
     elsif
       @cash_register.total < drink[1].price
-      Message.lack_of_money(drink_name: drink[1].name)
+      Message.lack_of_money(product_name: drink[1].name)
       return false
     end
   end
@@ -119,28 +119,28 @@ class VendingMachine
     
     stock_of_drinks = InventoryControl.stock_number(product_name: drink[1].name, number_of_items: @stock_of_drinks)
 
-    Message.purchase_message(drink_name: drink[1].name)
+    Message.purchase_message(product_name: drink[1].name)
 
    if @cash_register.total >= drink[1].price && stock_of_drinks[1].number > 0
-      Message.purchased_message(drink_name: drink[1].name)
+      Message.purchased_message(product_name: drink[1].name)
 
       @cash_register.purchase(drink[1].price)
 
-      Message.subtraction_process_message(drink_price: drink[1].price)
+      Message.subtraction_process_message(product_price: drink[1].price)
       Message.current_total_message(total: @cash_register.total)
 
       @cash_register.add_sales(drink[1].price)
 
-      Message.add_sales_message(price: drink[1].price)
+      Message.add_sales_message(product_price: drink[1].price)
 
       stock_of_drinks[1].shipment
-      Message.current_stock_number(drink_name: drink[1].name, 
-                                   drink_number: stock_of_drinks[1].number)
+      Message.current_stock_number(product_name: drink[1].name, 
+                                   number_of_items: stock_of_drinks[1].number)
       return drink[1].name, drink[1].price, stock_of_drinks[1].number
     elsif @cash_register.total >= drink[1].price && stock_of_drinks[1].number > 0
       Message.not_available_due_to_ack_of_stock_message
     elsif @cash_register.total < drink[1].price
-      Message.do_not_have_enough_money_to_purchase(drink_name: drink[1].name)
+      Message.do_not_have_enough_money_to_purchase(product_name: drink[1].name)
     end
   end
 

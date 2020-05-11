@@ -25,19 +25,19 @@ module Message
     print "#{change}円のお釣りです！\n"
   end
 
-  def self.drink_name_conversion(drink_name: :cola)
-    case drink_name
+  def self.product_name_conversion(product_name: :cola)
+    case product_name
     when :cola
-      drink_name = "コーラ"
+      product_name = "コーラ"
     when :redbull
-      drink_name = "レッドブル"
+      product_name = "レッドブル"
     when :water
-      drink_name = "水"
+      product_name = "水"
     end
   end
 
-  def self.replenishment_message(product_name: :product_name)
-    product_name = drink_name_conversion(drink_name: product_name)
+  def self.replenishment_message(product_name: :cola)
+    product_name = product_name_conversion(product_name: product_name)
     print "#{product_name}を補充をしました!\n"
   end
 
@@ -45,58 +45,58 @@ module Message
     print "現在のラインナップ\n"
   end
 
-  def self.lineup_drink_message(drink_name: "cola", drink_price: 0, drink_number: 0)
-    drink_name = drink_name_conversion(drink_name: drink_name)
-    print "#{drink_name}, #{drink_price}円, #{drink_number}本\n"
+  def self.lineup_information_message(product_name: :cola, product_price: 0, number_of_items: 0)
+    product_name = product_name_conversion(product_name: product_name)
+    print "#{product_name}, #{product_price}円, #{number_of_items}本\n"
   end
 
   def self.available_for_purchase_lineup_message
     print "購入可能なラインナップを表示\n"
   end
 
-  def self.available_for_purchase_drink_message(drink_name: "cola")
-    drink_name = drink_name_conversion(drink_name: drink_name)
-    print "#{drink_name}が買えるか確認します\n"
+  def self.purchase_confirmation_message(product_name: :cola)
+    product_name = product_name_conversion(product_name: product_name)
+    print "#{product_name}が買えるか確認します\n"
   end
 
-  def self.available_for_purchase_message(drink_name: "cola")
-    drink_name = drink_name_conversion(drink_name: drink_name)
-    print "在庫があり、金額が足りるので#{drink_name}を購入できます\n"
+  def self.available_for_purchase_message(product_name: :cola)
+    product_name = product_name_conversion(product_name: product_name)
+    print "在庫があり、金額が足りるので#{product_name}を購入できます\n"
   end
 
   def self.inventory_shortage_message
     print "金額は足りますが、在庫がありません。\n"
   end
 
-  def self.lack_of_money(drink_name: "cola")
-    drink_name = drink_name_conversion(drink_name: drink_name)
-    print "金額が足りないので#{drink_name}を購入できません!\n"
+  def self.lack_of_money(product_name: :cola)
+    product_name = product_name_conversion(product_name: product_name)
+    print "金額が足りないので#{product_name}を購入できません!\n"
   end
 
-  def self.purchase_message(drink_name: "cola")
-    print "#{drink_name}を購入します！\n"
+  def self.purchase_message(product_name: :cola)
+    print "#{product_name}を購入します！\n"
   end
 
-  def self.purchased_message(drink_name: "cola")
-    drink_name = drink_name_conversion(drink_name: drink_name)
-    print "在庫があり、金額が足りるので#{drink_name}を購入しました!\n"
+  def self.purchased_message(product_name: :cola)
+    product_name = product_name_conversion(product_name: product_name)
+    print "在庫があり、金額が足りるので#{product_name}を購入しました!\n"
   end
 
-  def self.subtraction_process_message(drink_price: 0)
-    print "合計金額から#{drink_price}円が引かれました!\n"
+  def self.subtraction_process_message(product_price: 0)
+    print "合計金額から#{product_price}円が引かれました!\n"
   end
 
-  def self.add_sales_message(price: 0)
-    print "売上金に#{price}円を追加しました!\n"
+  def self.add_sales_message(product_price: 0)
+    print "売上金に#{product_price}円を追加しました!\n"
   end
 
-  def self.current_stock_number(drink_name: "cola", drink_number: 0)
-    drink_name = drink_name_conversion(drink_name: drink_name)
-    print "現在の#{drink_name}の本数は#{drink_number}本です!\n"
+  def self.current_stock_number(product_name: :cola, number_of_items: 0)
+    product_name = product_name_conversion(product_name: product_name)
+    print "現在の#{product_name}の本数は#{number_of_items}本です!\n"
   end
 
   def self.not_available_due_to_ack_of_stock_message
-    p "金額は足りますが、在庫がありませんので購入できませんでした!\n"
+    p "金額は足りますが、在庫がありませんので購入できませんでした!"
   end
 
   def self.not_available_for_purchase
@@ -104,8 +104,8 @@ module Message
 
   end
 
-  def self.do_not_have_enough_money_to_purchase(drink_name: :cola)
-    product_name = drink_name_conversion(drink_name: drink_name)
-    p "金額が足りないので#{product_name}を購入できませんでした!\n"
+  def self.do_not_have_enough_money_to_purchase(product_name: :cola)
+    product_name = product_name_conversion(product_name: product_name)
+    p "金額が足りないので#{product_name}を購入できませんでした!"
   end
 end
