@@ -133,9 +133,9 @@ class VendingMachine
 
       Message.add_sales_message(price: drink[1].price)
 
+      stock_of_drinks[1].shipment
       Message.current_stock_number(drink_name: drink[1].name, 
                                    drink_number: stock_of_drinks[1].number)
-      stock_of_drinks[1].shipment
       return drink[1].name, drink[1].price, stock_of_drinks[1].number
     elsif @cash_register.total >= drink[1].price && stock_of_drinks[1].number > 0
       Message.not_available_due_to_ack_of_stock_message
