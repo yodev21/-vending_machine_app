@@ -53,7 +53,7 @@ module InventoryControl
     if cash_register.total >= items[1].price && stock[1].number > 0
       purchase_flg = true
       reason = "available_for_purchase"
-    elsif cash_register.total >= items[1].price && stock[1].number > 0
+    elsif cash_register.total >= items[1].price && stock[1].number == 0
       purchase_flg = false
       reason = "inventory_shortage"
     elsif

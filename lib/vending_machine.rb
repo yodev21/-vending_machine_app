@@ -102,9 +102,9 @@ class VendingMachine
     product_information = InventoryControl.product_information(product_name: product_name, 
                                                                product_list: @products,
                                                                number_of_items: @number_of_items)
-    Message.purchase_message(product_name: product_name)
 
    if @cash_register.total >= product_information[:product_price] && product_information[:number_of_items].number > 0
+      Message.purchase_message(product_name: product_name)
       Message.purchased_message(product_name: product_information[:product_name])
 
       @cash_register.purchase(product_information[:product_price])
@@ -122,7 +122,7 @@ class VendingMachine
               product_information[:product_price], 
               product_information[:number_of_items].number]
 
-    elsif @cash_register.total >= product_information[:product_price] && product_information[:number_of_items].number > 0
+    elsif @cash_register.total >= product_information[:product_price] && product_information[:number_of_items].number == 0
       Message.not_available_due_to_ack_of_stock_message
 
     elsif @cash_register.total < product_information[:product_price]
