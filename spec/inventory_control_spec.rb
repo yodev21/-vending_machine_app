@@ -79,7 +79,9 @@ describe InventoryControl do
         expect(InventoryControl.get_product?(product_name: :cola,
                                              product_list: products, 
                                              number_of_items: number_of_items, 
-                                             cash_register: cash_register)).to eq({:item_name=>:cola, :purchase_flg=>true, :reason=>"available_for_purchase"})
+                                             cash_register: cash_register)).to eq({:item_name=>:cola,
+                                                                                   :purchase_flg=>true, 
+                                                                                   :reason=>"available_for_purchase"})
       end
 
       it "在庫の不足が原因で対象の商品が購入不可であればであればfalseが返ること" do
