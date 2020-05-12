@@ -22,13 +22,13 @@ class VendingMachine
   end
 
   # 商品の初期化処理
-  def initilize_replenishment
-    return InventoryControl.initilize_replenishment
-  end
-
-  # 在庫の初期化処理
   def initialize_product
     return InventoryControl.initilize_product
+  end
+  
+  # 在庫の初期化処理
+  def initilize_replenishment
+    return InventoryControl.initilize_replenishment
   end
 
   # お金投入処理
