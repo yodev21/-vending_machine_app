@@ -2,7 +2,7 @@ require 'spec_helper'
 describe Drink do
   
   describe "アクセサメソッド" do
-    context "読み込み処理行った場合" do
+    context "読み込み処理を行った場合" do
       it "コーラの情報が表示されること" do
         cola = Drink.cola
         expect(cola.name).to eq(:cola)
