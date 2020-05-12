@@ -1,5 +1,27 @@
 require "spec_helper"
 describe Stock do
+ describe "アクセサメソッド" do
+    context "読み込み処理行った場合" do
+      it "コーラの情報が表示されること" do
+        cola = Stock.new(product_name: :cola, number: 1)
+        expect(cola.product_name).to eq(:cola)
+        expect(cola.number).to eq(1)
+      end
+
+      it "レッドブルの情報がされること" do
+        redbull = Stock.new(product_name: :redbull, number: 1)
+        expect(redbull.product_name).to eq(:redbull)
+        expect(redbull.number).to eq(1)
+      end
+
+      it "水の情報が表示されること" do
+        water = Stock.new(product_name: :water, number: 1)
+        expect(water.product_name).to eq(:water)
+        expect(water.number).to eq(1)
+      end
+    end
+  end
+  
   describe "補充機能" do
     context "補充処理を行われた場合" do
       it "コーラの在庫が加算されること" do
