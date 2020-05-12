@@ -10,8 +10,8 @@ class Stock
     @number += number
   end
 
-  def shipment
-    @number -= 1
+  def shipment(number: 1)
+    @number -= number
   end
 
 end

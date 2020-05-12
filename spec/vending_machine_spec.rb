@@ -1,6 +1,5 @@
 require 'spec_helper'
 describe VendingMachine do
-
   describe "お金投入処理" do
     context "お金を投入した場合" do
       it "想定した金額であればnilを返すこと" do
@@ -11,6 +10,7 @@ describe VendingMachine do
         expect(vm.insert_coin(500)).to be nil
         expect(vm.insert_coin(1000)).to be nil
       end
+
       it "Warn 想定外の金額であれば投入した金額を変えること" do
         vm = vendingMachine=VendingMachine.new
         expect(vm.insert_coin(1)).to be 1
@@ -83,7 +83,6 @@ describe VendingMachine do
       it "[]が表示されること" do
         vm = vendingMachine=VendingMachine.new
         expect(vm.available_drinks).to eq([])
-
       end
     end
   end
