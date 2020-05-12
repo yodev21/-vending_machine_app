@@ -43,6 +43,7 @@ module Message
 
   def self.replenishment_message(product_name: :cola)
     product_name = product_name_conversion(product_name: product_name)
+
     print "--------------------------------------------------------------------------------------------------------------------\n"
     print "#{product_name}を補充をしました!\n"
   end
@@ -54,6 +55,7 @@ module Message
 
   def self.lineup_information_message(product_list: args={})
     procucts = []
+
     product_list.each do |product|
       product_name = product_name_conversion(product_name: product[0])
       print "--------------------------------------------------------------------------------------------------------------------\n"
@@ -68,12 +70,14 @@ module Message
 
   def self.purchase_confirmation_message(product_name: :cola)
     product_name = product_name_conversion(product_name: product_name)
+
     print "--------------------------------------------------------------------------------------------------------------------\n"
     print "#{product_name}が買えるか確認します\n"
   end
 
   def self.available_for_purchase_message(product_name: :cola)
     product_name = product_name_conversion(product_name: product_name)
+
     print "--------------------------------------------------------------------------------------------------------------------\n"
     print "在庫があり、金額が足りるので#{product_name}を購入できます\n"
   end
@@ -85,18 +89,21 @@ module Message
 
   def self.lack_of_money(product_name: :cola)
     product_name = product_name_conversion(product_name: product_name)
+
     print "--------------------------------------------------------------------------------------------------------------------\n"
     print "金額が足りないので#{product_name}を購入できません!\n"
   end
 
   def self.purchase_message(product_name: :cola)
     product_name = product_name_conversion(product_name: product_name)
+
     print "--------------------------------------------------------------------------------------------------------------------\n"
     print "#{product_name}を購入します！\n"
   end
 
   def self.purchased_message(product_name: :cola)
     product_name = product_name_conversion(product_name: product_name)
+
     print "--------------------------------------------------------------------------------------------------------------------\n"
     print "在庫があり、金額が足りるので#{product_name}を購入しました!\n"
   end
@@ -113,6 +120,7 @@ module Message
 
   def self.current_stock_number(product_name: :cola, number_of_items: 0)
     product_name = product_name_conversion(product_name: product_name)
+
     print "--------------------------------------------------------------------------------------------------------------------\n"
     print "現在の#{product_name}の本数は#{number_of_items}本です!\n"
   end
@@ -130,7 +138,9 @@ module Message
 
   def self.do_not_have_enough_money_to_purchase(product_name: :cola)
     product_name = product_name_conversion(product_name: product_name)
+
     print "--------------------------------------------------------------------------------------------------------------------\n"
     p "金額が足りないので#{product_name}を購入できませんでした!"
   end
+  
 end

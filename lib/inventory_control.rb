@@ -5,6 +5,7 @@ module InventoryControl
     cola = Drink.cola
     redbull = Drink.redbull
     water = Drink.water
+
     return {cola: cola, redbull: redbull, water: water}
   end
 
@@ -30,6 +31,7 @@ module InventoryControl
 
     product_list.each do |key, product|
       items = number_of_items.find { |k, v| v.product_name.to_sym == product.name.to_sym }
+
       if cash_register.is_a?(CashRegister)
         if cash_register.total >= product.price && items[1].number > 0
           products << [product.name, product.price, items[1].number]
@@ -48,8 +50,8 @@ module InventoryControl
   def self.get_product?(product_name: nil, product_list: args={}, number_of_items: 0, cash_register: nil)
     items = product_list.find{ |k, v| v.name.to_sym == product_name.to_sym }
     stock = number_of_items.find { |k, v| v.product_name.to_sym == product_name.to_sym }
-
     purchase_flg = false
+
     if cash_register.total >= items[1].price && stock[1].number > 0
       purchase_flg = true
       reason = "available_for_purchase"
@@ -61,6 +63,7 @@ module InventoryControl
       purchase_flg = false
       reason = "lack_of_money"
     end
+
     return { purchase_flg: purchase_flg, reason: reason, item_name: items[1].name }
   end
 
@@ -68,6 +71,7 @@ module InventoryControl
   def self.product_information(product_name: nil, product_list: nil, number_of_items: nil)
     items = product_list.find{ |k, v| v.name.to_sym == product_name.to_sym }
     stock = number_of_items.find { |k, v| v.product_name.to_sym == product_name.to_sym }
+    
     return { product_name: items[1].name, product_price: items[1].price, number_of_items: stock[1] }
   end
 

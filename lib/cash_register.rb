@@ -1,5 +1,6 @@
 class CashRegister
 attr_reader :total, :sales, :change
+
  def initialize(total: 0, sales: 0, change: 0)
     @total = total
     @sales = sales
@@ -13,6 +14,7 @@ attr_reader :total, :sales, :change
   def refund
     @change = @total
     @total = 0
+
     return @change, @total
   end
 
@@ -23,4 +25,5 @@ attr_reader :total, :sales, :change
   def add_sales(price)
     @sales += price
   end
+
 end

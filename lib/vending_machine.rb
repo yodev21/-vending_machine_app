@@ -16,12 +16,9 @@ class VendingMachine
 
   def initialize
     initialize_message
-
     @cash_register = CashRegister.new(total: 0, sales: 0, change: 0)
-
     @products = initialize_product
     @number_of_items = initilize_replenishment
-
   end
 
   # 商品の初期化処理
@@ -42,6 +39,7 @@ class VendingMachine
       Message.current_total_message(total: @cash_register.total)
     else
       Message.insert_error_message(money, @cash_register.total)
+
       return money
     end
   end
@@ -50,6 +48,7 @@ class VendingMachine
   def refund
     @cash_register.refund
     Message.refund_message(@cash_register.change)
+
     return @cash_register.change
   end
 
@@ -57,6 +56,7 @@ class VendingMachine
   def drink_replenishment(drink_name: :cola, number: 1)
     InventoryControl.product_replenishment(product_name: drink_name, number_of_items: @number_of_items, number: number)
     Message.replenishment_message(product_name: drink_name) 
+
     return drink_name, number
   end
 
@@ -66,6 +66,7 @@ class VendingMachine
     products = InventoryControl.get_product_list(product_list: @products, 
                                                   number_of_items: @number_of_items)
     Message.lineup_information_message(product_list: products)
+
     return products
   end
 
@@ -75,6 +76,7 @@ class VendingMachine
     products = InventoryControl.get_product_list(product_list: @products, 
                                                  number_of_items: @number_of_items, 
                                                  cash_register: @cash_register)
+
     return products
   end
 
@@ -86,6 +88,7 @@ class VendingMachine
                                                   product_list: @products,
                                                   number_of_items: @number_of_items,
                                                   cash_register: @cash_register)
+
     if search_result[:reason] == "available_for_purchase"
       Message.available_for_purchase_message(product_name: search_result[:item_name])
     elsif search_result[:reason] == "inventory_shortage"
@@ -127,7 +130,6 @@ class VendingMachine
 
     elsif @cash_register.total < product_information[:product_price]
       Message.do_not_have_enough_money_to_purchase(product_name: product_information[:product_name])
-
     end
   end
 
