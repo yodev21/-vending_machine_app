@@ -25,5 +25,4 @@ attr_reader :total, :sales, :change
   def add_sales(price)
     @sales += price
   end
-
 end

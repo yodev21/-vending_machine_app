@@ -17,5 +17,4 @@ class Drink
     @name = name
     @price = price
   end
-
 end

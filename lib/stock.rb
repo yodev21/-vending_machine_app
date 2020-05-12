@@ -13,5 +13,4 @@ class Stock
   def shipment(number: 1)
     @number -= number
   end
-
 end

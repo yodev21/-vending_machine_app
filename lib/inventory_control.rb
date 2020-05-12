@@ -74,5 +74,4 @@ module InventoryControl
     
     return { product_name: items[1].name, product_price: items[1].price, number_of_items: stock[1] }
   end
-
 end
