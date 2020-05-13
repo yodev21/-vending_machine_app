@@ -65,6 +65,10 @@ vm.refund # => 80
 # 売り上げ合計金額の確認
 vm.current_sales # => 420
 
+# 新商品追加
+vm.new_product_addition(:tea, 150) # => {:drink_name=>:tea, :drink_price=>150, :number_of_items=>1}
+vm.list_of_drinks # => [[:cola, 120, 6], [:redbull, 200, 2], [:water, 100, 2], [:tea, 150, 1]]
+
 # 終了
 exit
 ```
