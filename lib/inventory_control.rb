@@ -1,5 +1,4 @@
 module InventoryControl
-  
   # 商品補充処理
   def self.product_replenishment(product_name: nil, number_of_items: args={}, number: 1)
     stock_of_drinks = number_of_items.find { |k, v| v.product_name.to_sym == product_name }

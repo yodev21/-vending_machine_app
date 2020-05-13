@@ -1,5 +1,4 @@
 module Message
-  
   private
 
   def self.insert_message(money)
