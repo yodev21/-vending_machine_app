@@ -37,6 +37,8 @@ module Message
       product_name = "レッドブル"
     when :water
       product_name = "水"
+    else
+      product_name
     end
   end
 

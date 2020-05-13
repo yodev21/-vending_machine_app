@@ -1,5 +1,36 @@
 require 'spec_helper'
 describe VendingMachine do
+  describe "新商品追加機能" do
+    context "新商品を追加した場合" do
+      it "新商品の属性が表示されること" do
+        vm = vendingMachine=VendingMachine.new
+        drink_information = vm.new_product_addition(:tea, 150)
+        expect(drink_information[:drink_name]).to eq(:tea)
+        expect(drink_information[:drink_price]).to eq(150)
+        expect(drink_information[:number_of_items]).to eq(1)
+      end
+
+      it "新商品の在庫一覧が表示されること" do
+        vm = vendingMachine=VendingMachine.new
+        drink_information = vm.new_product_addition(:tea, 150)
+        expect(vm.list_of_drinks).to eq([[:cola, 120, 5], 
+                                         [:redbull, 200, 1], 
+                                         [:water, 100, 1], 
+                                         [:tea, 150, 1]])
+      end
+
+      it "新商品の購入可能一覧が表示されること" do
+        vm = vendingMachine=VendingMachine.new
+        vm.insert_coin(500)
+        drink_information = vm.new_product_addition(:tea, 150)
+        expect(vm.available_drinks).to eq([[:cola, 120, 5], 
+                                           [:redbull, 200, 1], 
+                                           [:water, 100, 1], 
+                                           [:tea, 150, 1]])
+      end
+    end
+  end
+
   describe "お金投入処理" do
     context "お金を投入した場合" do
       it "想定した金額であればnilを返すこと" do

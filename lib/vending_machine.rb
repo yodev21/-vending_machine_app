@@ -40,6 +40,17 @@ class VendingMachine
     return {cola: cola_inventory, redbull: redbull_inventory, water: water_inventory}
   end
 
+  # 新商品追加処理
+  def new_product_addition(product_name, product_price) 
+    drink = Drink.new(product_name: product_name, product_price: product_price)
+    stock = Stock.new(product_name: drink.name)
+    @products[product_name] = drink
+    @number_of_items[product_name] = stock
+    return { drink_name: drink.name, 
+             drink_price: drink.price, 
+             number_of_items: stock.number }
+  end
+
   # お金投入処理
   def insert_coin(money)
     if Money::MONEY.include?(money)
