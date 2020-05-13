@@ -1,20 +1,8 @@
 class Drink
   attr_reader :name, :price
 
-  def self.cola
-    self.new 120, :cola
-  end
-
-  def self.redbull
-    self.new 200, :redbull
-  end
-
-  def self.water
-    self.new 100, :water
-  end
-
-  def initialize(price, name)
-    @name = name
-    @price = price
+  def initialize(product_name: :cola, product_price: 120)
+    @name = product_name
+    @price = product_price
   end
 end

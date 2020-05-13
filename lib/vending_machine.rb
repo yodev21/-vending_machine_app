@@ -16,19 +16,28 @@ class VendingMachine
 
   def initialize
     initialize_message
-    @cash_register = CashRegister.new(total: 0, sales: 0, change: 0)
+    @cash_register = CashRegister.new(total: 0, 
+                              sales: 0, change: 0)
     @products = initialize_product
     @number_of_items = initilize_replenishment
   end
 
   # 商品の初期化処理
   def initialize_product
-    return InventoryControl.initilize_product
+    cola = Drink.new(product_name: :cola, product_price: 120)
+    redbull = Drink.new(product_name: :redbull, product_price: 200)
+    water = Drink.new(product_name: :water, product_price: 100)
+
+    return {cola: cola, redbull: redbull, water: water}
   end
   
   # 在庫の初期化処理
   def initilize_replenishment
-    return InventoryControl.initilize_replenishment
+    cola_inventory = Stock.new(product_name: :cola, number: 5)
+    redbull_inventory = Stock.new(product_name: :redbull, number: 1)
+    water_inventory = Stock.new(product_name: :water, number: 1)
+
+    return {cola: cola_inventory, redbull: redbull_inventory, water: water_inventory}
   end
 
   # お金投入処理

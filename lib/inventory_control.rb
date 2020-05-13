@@ -1,23 +1,5 @@
 module InventoryControl
   
-  # 商品の初期化処理
-  def self.initilize_product
-    cola = Drink.cola
-    redbull = Drink.redbull
-    water = Drink.water
-
-    return {cola: cola, redbull: redbull, water: water}
-  end
-
-  # 在庫の初期化処理
-  def self.initilize_replenishment
-    cola_inventory = Stock.new(product_name: :cola, number: 5)
-    redbull_inventory = Stock.new(product_name: :redbull, number: 1)
-    water_inventory = Stock.new(product_name: :water, number: 1)
-
-    return {cola: cola_inventory, redbull: redbull_inventory, water: water_inventory}
-  end
-
   # 商品補充処理
   def self.product_replenishment(product_name: nil, number_of_items: args={}, number: 1)
     stock_of_drinks = number_of_items.find { |k, v| v.product_name.to_sym == product_name }
